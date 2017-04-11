@@ -4,7 +4,12 @@ class SaladDisplay extends Component{
 
   constructor(props) {
     super(props);
-    this.state = {searchText: ""};
+    this.state = {
+      searchText: "",
+      recipeTitle: "",
+      recipeUrl: "",
+      recipeImg: ""
+    };
   }
 
   render() {
@@ -15,14 +20,19 @@ class SaladDisplay extends Component{
     );
   }
 
-  getRecipe(query) {
-    const API_KEY = "8756beb18496b780f61372738958adf2";
-    let url = "http://food2fork.com/api/search?sort=r&key=" + API_KEY + "&q=" + encodeURIComponent(query);
-
-    // fetch(url)
-    // .then(data => {
-    //   console.log(data);
-    // });
+  getRecipe(text) {
+    if (text.length > 0) {
+      let query = encodeURIComponent(text);
+      let serverEndpoint = '/salad/' + query;
+      fetch(serverEndpoint)
+        .then(response => response.json())
+        .then(data => {
+          console.log(data.recipes[0]);
+        })
+        .catch(error => {
+          console.log("fetch error ", error);
+        })
+    }
   }
 }
 

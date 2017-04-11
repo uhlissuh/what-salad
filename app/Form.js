@@ -21,7 +21,7 @@ class Form extends Component {
             placeholder="asparagus"
             onChange={this.handleChange}
             value={this.state.text} />
-          <button>Go</button>
+          <button type='submit'>Go</button>
         </form>
       </div>
     );
