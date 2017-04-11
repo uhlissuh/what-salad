@@ -18,7 +18,7 @@ class App extends Component {
   }
 
   onSubmitForm(text) {
-    this.refs.saladDisplay.setState({searchText: text});
+    this.refs.saladDisplay.getRecipe(text);
   }
 }
 

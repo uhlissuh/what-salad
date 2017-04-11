@@ -6,8 +6,6 @@ class Form extends Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.state = {text: ''};
   }
 
   render() {
@@ -16,25 +14,20 @@ class Form extends Component {
         <form onSubmit={this.handleSubmit}>
           <label>vegetables: </label>
           <input
+            ref="searchWords"
             className="veggieInput"
             type="text"
             placeholder="asparagus"
-            onChange={this.handleChange}
-            value={this.state.text} />
+          />
           <button type='submit'>Go</button>
         </form>
       </div>
     );
   }
 
-  handleChange(e) {
-    this.setState({text: e.target.value});
-
-  }
-
   handleSubmit(e) {
     e.preventDefault();
-    this.props.onSubmitForm(this.state.text);
+    this.props.onSubmitForm(this.refs.searchWords.value);
   }
 }
 

@@ -6,17 +6,23 @@ class SaladDisplay extends Component{
     super(props);
     this.state = {
       searchText: "",
+      recipeError: "",
       recipeTitle: "",
       recipeUrl: "",
-      recipeImg: ""
+      recipeImg: "",
+      recipePublisher: ""
+
     };
   }
 
   render() {
     return (
       <div className="salad-box">
-      {this.getRecipe(this.state.searchText)}
-      </div>
+      {this.state.recipeTitle}
+      <br></br>
+      <a href={this.state.recipeUrl} target="_blank">Check it out on {this.state.recipePublisher}</a>
+      <span>{this.state.recipeError}</span>
+    </div>
     );
   }
 
@@ -27,11 +33,20 @@ class SaladDisplay extends Component{
       fetch(serverEndpoint)
         .then(response => response.json())
         .then(data => {
-          console.log(data.recipes[0]);
+          if (data.recipes != null) {
+            this.setState({
+              recipeTitle: data.recipes[0].title,
+              recipeUrl: data.recipes[0].source_url,
+              recipeImg: data.recipes[0].image_url,
+              recipePublisher: data.recipes[0].publisher
+            });
+          } else {
+            this.setState({recipeError: "No recipes found with those ingredients!"})
+          }
         })
         .catch(error => {
           console.log("fetch error ", error);
-        })
+        });
     }
   }
 }

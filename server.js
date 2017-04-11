@@ -24,12 +24,30 @@ app.get('/salad/:query', function (req, res) {
   request(url, function (error, response, body) {
     console.log('error:', error);
     console.log('statusCode:', response && response.statusCode);
-    let recipesResponse = JSON.parse(body);
-    let recipesArray = recipesResponse.recipes.slice(0, 3);
-    console.log(recipesArray);
-    res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify({'recipes': recipesArray}));
-    res.end();
+    if (error === 'limit') {
+      res.send({
+        'recipes': null,
+        'limit': true
+      })
+    } else {
+      let recipesResponse = JSON.parse(body);
+      let recipesArray = recipesResponse.recipes.slice(0, 3);
+      console.log(recipesArray);
+      res.setHeader('Content-Type', 'application/json');
+      res.send(JSON.stringify(
+        {
+        'recipes': recipesArray,
+        'limit': false
+        }
+      ));
+      res.end();
+    }
+
+    // } else {
+    //   res.send(JSON.stringify({'recipes': null}));
+    //   res.end();
+    // }
+
   });
 
 })
