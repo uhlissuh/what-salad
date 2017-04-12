@@ -16,38 +16,40 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get('/salad/:query', function (req, res) {
-  console.log('HIII');
-  const API_KEY = "8756beb18496b780f61372738958adf2";
+  const API_KEY = "2fbcf141f4f25cde67d9645786a849a9";
   let query = req.params.query + " salad";
   console.log(query);
   let url = "http://food2fork.com/api/search?sort=r&key=" + API_KEY + "&q=" + encodeURIComponent(query);
+
   request(url, function (error, response, body) {
     console.log('error:', error);
     console.log('statusCode:', response && response.statusCode);
     if (error === 'limit') {
-      res.send({
+      res.send(JSON.stringify({
         'recipes': null,
-        'limit': true
-      })
+        'limit': true }
+      ));
     } else {
       let recipesResponse = JSON.parse(body);
-      let recipesArray = recipesResponse.recipes.slice(0, 3);
-      console.log(recipesArray);
-      res.setHeader('Content-Type', 'application/json');
-      res.send(JSON.stringify(
-        {
-        'recipes': recipesArray,
-        'limit': false
-        }
-      ));
-      res.end();
+      if (recipesResponse.recipes.length === 0) {
+        res.send(JSON.stringify({
+          'recipes': null,
+          'limit': false}
+        ));
+        res.end();
+      } else {
+        let recipesArray = recipesResponse.recipes;
+        let sortedRecipes = recipesArray.sort(function(recipeA, recipeB) {
+          return scoreRecipe(recipeA) - scoreRecipe(recipeB);
+        });
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify({
+          'recipes': sortedRecipes,
+          'limit': false }
+        ));
+        res.end();
+      }
     }
-
-    // } else {
-    //   res.send(JSON.stringify({'recipes': null}));
-    //   res.end();
-    // }
-
   });
 
 })
@@ -81,6 +83,15 @@ if (isDeveloping) {
   });
 }
 
+function scoreRecipe(recipe) {
+  let preferredPublishers = ["Bon Appetit", "Serious Eats", "Smitten Kitchen", "Simply Recipes"];
+  let indexOfRecipe = preferredPublishers.indexOf(recipe.publisher);
+  if (indexOfRecipe == -1) {
+    return 100;
+  } else {
+    return indexOfRecipe;
+  }
+}
 
 app.listen(port, '0.0.0.0', function onStart(err) {
   if (err) {

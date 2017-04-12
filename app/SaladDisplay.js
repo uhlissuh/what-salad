@@ -21,6 +21,7 @@ class SaladDisplay extends Component{
       {this.state.recipeTitle}
       <br></br>
       <a href={this.state.recipeUrl} target="_blank">Check it out on {this.state.recipePublisher}</a>
+      <img src={this.state.recipeImg}></img>
       <span>{this.state.recipeError}</span>
     </div>
     );
@@ -38,7 +39,8 @@ class SaladDisplay extends Component{
               recipeTitle: data.recipes[0].title,
               recipeUrl: data.recipes[0].source_url,
               recipeImg: data.recipes[0].image_url,
-              recipePublisher: data.recipes[0].publisher
+              recipePublisher: data.recipes[0].publisher,
+              recipeError: ""
             });
           } else {
             this.setState({recipeError: "No recipes found with those ingredients!"})
