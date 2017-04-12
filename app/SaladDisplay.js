@@ -35,15 +35,23 @@ class SaladDisplay extends Component{
         .then(response => response.json())
         .then(data => {
           if (data.recipes != null) {
+            let numberOfRecipes = data.recipes.length;
+            let randomNumber = Math.floor((Math.random() * numberOfRecipes) + 1);
             this.setState({
-              recipeTitle: data.recipes[0].title,
-              recipeUrl: data.recipes[0].source_url,
-              recipeImg: data.recipes[0].image_url,
-              recipePublisher: data.recipes[0].publisher,
+              recipeTitle: data.recipes[randomNumber].title,
+              recipeUrl: data.recipes[randomNumber].source_url,
+              recipeImg: data.recipes[randomNumber].image_url,
+              recipePublisher: data.recipes[randomNumber].publisher,
               recipeError: ""
             });
           } else {
-            this.setState({recipeError: "No recipes found with those ingredients!"})
+            this.setState({
+              recipeTitle: null,
+              recipeUrl: null,
+              recipeImg: null,
+              recipePublisher: null,
+              recipeError: "No recipes found with those ingredients!",
+            })
           }
         })
         .catch(error => {
