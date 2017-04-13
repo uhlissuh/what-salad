@@ -6,6 +6,7 @@ class Form extends Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleSeasonal = this.handleSeasonal.bind(this);
   }
 
   render() {
@@ -20,6 +21,8 @@ class Form extends Component {
             placeholder="asparagus"
           />
           <button type='submit'>Go</button>
+          <br />
+          <button onClick={this.handleSeasonal}>Seasonal Surprise!</button>
         </form>
       </div>
     );
@@ -28,6 +31,11 @@ class Form extends Component {
   handleSubmit(e) {
     e.preventDefault();
     this.props.onSubmitForm(this.refs.searchWords.value);
+  }
+
+  handleSeasonal(e) {
+    e.preventDefault();
+    this.props.onSeasonalSubmit();
   }
 }
 

@@ -59,7 +59,39 @@ class SaladDisplay extends Component{
         });
     }
   }
+
+  getSeasonal() {
+    let serverEndpoint = "/seasonal";
+
+    fetch(serverEndpoint)
+    .then(response => response.json())
+    .then(data => {
+      if (data.recipes != null) {
+        let numberOfRecipes = data.recipes.length;
+        let randomNumber = Math.floor((Math.random() * numberOfRecipes));
+        this.setState({
+          recipeTitle: data.recipes[randomNumber].title,
+          recipeUrl: data.recipes[randomNumber].source_url,
+          recipeImg: data.recipes[randomNumber].image_url,
+          recipePublisher: data.recipes[randomNumber].publisher,
+          recipeError: ""
+        });
+      } else {
+        this.setState({
+          recipeTitle: null,
+          recipeUrl: null,
+          recipeImg: null,
+          recipePublisher: null,
+          recipeError: "No recipes found with those ingredients!",
+        })
+      }
+    })
+    .catch(error => {
+      console.log("fetch error ", error);
+    });
+  }
 }
+
 
 
 export default SaladDisplay;

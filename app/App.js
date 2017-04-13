@@ -11,7 +11,10 @@ class App extends Component {
         <div className="App-header">
           <h2>What Salad Should You Eat?</h2>
         </div>
-        <Form onSubmitForm={this.onSubmitForm.bind(this)}/>
+        <Form
+          onSubmitForm={this.onSubmitForm.bind(this)}
+          onSeasonalSubmit ={this.onSeasonalSubmit.bind(this)}
+        />
         <SaladDisplay ref='saladDisplay'/>
       </div>
     );
@@ -19,6 +22,10 @@ class App extends Component {
 
   onSubmitForm(text) {
     this.refs.saladDisplay.getRecipe(text);
+  }
+
+  onSeasonalSubmit() {
+    this.refs.saladDisplay.getSeasonal();
   }
 }
 
