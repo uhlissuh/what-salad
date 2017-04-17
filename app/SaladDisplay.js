@@ -11,7 +11,6 @@ class SaladDisplay extends Component{
       recipeUrl: "",
       recipeImg: "",
       recipePublisher: ""
-
     };
   }
 

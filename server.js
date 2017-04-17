@@ -13,44 +13,22 @@ const app = express();
 const request = require('request');
 const bodyParser = require('body-parser');
 
+const food2Fork = require('./food2fork.js');
+
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get('/salad/:query', function (req, res) {
-  const API_KEY = "2fbcf141f4f25cde67d9645786a849a9";
   let query = req.params.query + " salad";
-  console.log(query);
-  let url = "http://food2fork.com/api/search?sort=r&key=" + API_KEY + "&q=" + encodeURIComponent(query);
-
-  request(url, function (error, response, body) {
-    console.log('error:', error);
-    console.log('statusCode:', response && response.statusCode);
-    if (error === 'limit') {
-      res.send(JSON.stringify({
-        'recipes': null,
-        'limit': true }
-      ));
-    } else {
-      let recipesResponse = JSON.parse(body);
-      if (recipesResponse.recipes.length === 0) {
-        res.send(JSON.stringify({
-          'recipes': null,
-          'limit': false}
-        ));
-        res.end();
-      } else {
-        let recipesArray = recipesResponse.recipes;
-        let sortedRecipes = recipesArray.sort(function(recipeA, recipeB) {
-          return scoreRecipe(recipeA) - scoreRecipe(recipeB);
-        });
-        res.setHeader('Content-Type', 'application/json');
-        res.send(JSON.stringify({
-          'recipes': sortedRecipes,
-          'limit': false }
-        ));
-        res.end();
-      }
-    }
-  });
+  food2Fork.getRankedRecipes(query)
+    .then(data => {
+      res.setHeader('Content-Type', 'application/json');
+      res.send(data);
+      res.end();
+    })
+    .catch(data => {
+      res.send(data);
+      res.end();
+    });
 });
 
 app.get('/seasonal', function(req, res) {
@@ -76,11 +54,6 @@ app.get('/seasonal', function(req, res) {
   let randomNumber = Math.floor((Math.random() * currentVeggies.length));
   let query = currentVeggies[randomNumber] + " salad";
   const API_KEY = "2fbcf141f4f25cde67d9645786a849a9";
-
-  console.log(currentVeggies.length);
-  console.log(randomNumber);
-  console.log(query);
-
 
   let url = "http://food2fork.com/api/search?sort=r&key=" + API_KEY + "&q=" + encodeURIComponent(query);
 
@@ -147,15 +120,6 @@ if (isDeveloping) {
   });
 }
 
-function scoreRecipe(recipe) {
-  let preferredPublishers = ["Bon Appetit", "Serious Eats", "Smitten Kitchen", "Simply Recipes"];
-  let indexOfRecipe = preferredPublishers.indexOf(recipe.publisher);
-  if (indexOfRecipe == -1) {
-    return 100;
-  } else {
-    return indexOfRecipe;
-  }
-}
 
 app.listen(port, '0.0.0.0', function onStart(err) {
   if (err) {
