@@ -25,6 +25,7 @@ exports.getRankedRecipes= function(query) {
             return scoreRecipe(recipeA) - scoreRecipe(recipeB);
           });
           resolve(JSON.stringify({
+            'query': query,
             'recipes': sortedRecipes,
             'limit': false}
           ));
