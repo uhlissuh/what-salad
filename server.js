@@ -37,7 +37,6 @@ app.get('/seasonal', function(req, res) {
   let springVeggies = ["asparagus", "artichoke", "radishes", "carrot", "peas", "leek", "watercress"];
   let summerVeggies = ["blueberries", "arugula", "cucumber", "pepper", "tomato", "green bean", "corn", "fig", "strawberry", "zucchini", "melon"]
   let fallVeggies = ["squash", "apple", "pear", "cranberries", "pumpkin", "endive", "broccoli"]
-
   let currentMonth = new Date().getMonth() + 1;
   let currentVeggies = [];
 
@@ -53,40 +52,17 @@ app.get('/seasonal', function(req, res) {
 
   let randomNumber = Math.floor((Math.random() * currentVeggies.length));
   let query = currentVeggies[randomNumber] + " salad";
-  const API_KEY = "2fbcf141f4f25cde67d9645786a849a9";
 
-  let url = "http://food2fork.com/api/search?sort=r&key=" + API_KEY + "&q=" + encodeURIComponent(query);
-
-  request(url, function (error, response, body) {
-    console.log('error:', error);
-    console.log('statusCode:', response && response.statusCode);
-    if (error === 'limit') {
-      res.send(JSON.stringify({
-        'recipes': null,
-        'limit': true }
-      ));
-    } else {
-      let recipesResponse = JSON.parse(body);
-      if (recipesResponse.recipes.length === 0) {
-        res.send(JSON.stringify({
-          'recipes': null,
-          'limit': false}
-        ));
-        res.end();
-      } else {
-        let recipesArray = recipesResponse.recipes;
-        let sortedRecipes = recipesArray.sort(function(recipeA, recipeB) {
-          return scoreRecipe(recipeA) - scoreRecipe(recipeB);
-        });
-        res.setHeader('Content-Type', 'application/json');
-        res.send(JSON.stringify({
-          'recipes': sortedRecipes,
-          'limit': false }
-        ));
-        res.end();
-      }
-    }
-  });
+  food2Fork.getRankedRecipes(query)
+    .then(data => {
+      res.setHeader('Content-Type', 'application/json');
+      res.send(data);
+      res.end();
+    })
+    .catch(data => {
+      res.send(data);
+      res.end();
+    });
 
 
 });
