@@ -13,7 +13,8 @@ class SaladDisplay extends Component{
       recipeTitle: "",
       recipeUrl: "",
       recipeImg: "",
-      recipePublisher: ""
+      recipePublisher: "",
+      limitError: ""
     };
   }
 
@@ -25,29 +26,31 @@ class SaladDisplay extends Component{
       <a href={this.state.recipeUrl} target="_blank">Check it out on {this.state.recipePublisher}</a>
       <img src={this.state.recipeImg}></img>
       <span>{this.state.recipeError}</span>
+      <span>{this.state.limitError}</span>
     </div>
     );
   }
 
   getRecipe(text) {
+    let existingVeggie = "";
     if (text.length > 0) {
       if (lastSearchedRecipes[text]) {
-        lastSearchedRecipes[text].count += 1;
+         existingVeggie = lastSearchedRecipes[text];
+        existingVeggie.count += 1;
         this.setState({
-          recipeTitle: lastSearchedRecipes[text].recipes[lastSearchedRecipes[text].count - 1].title,
-          recipeUrl: lastSearchedRecipes[text].recipes[lastSearchedRecipes[text].count - 1].source_url,
-          recipeImg: lastSearchedRecipes[text].recipes[lastSearchedRecipes[text].count - 1].image_url,
-          recipePublisher: lastSearchedRecipes[text].recipes[lastSearchedRecipes[text].count - 1].publisher,
+          recipeTitle: existingVeggie.recipes[existingVeggie.count - 1].title,
+          recipeUrl: existingVeggie.recipes[existingVeggie.count - 1].source_url,
+          recipeImg: existingVeggie.recipes[existingVeggie.count - 1].image_url,
+          recipePublisher: existingVeggie.recipes[existingVeggie.count - 1].publisher,
           recipeError: ""
         });
       } else {
-        let query = encodeURIComponent(text);
-        let serverEndpoint = '/salad/' + query;
+        let serverEndpoint = '/salad/' + encodeURIComponent(text);
         fetch(serverEndpoint)
           .then(response => response.json())
           .then(data => {
             if (data.recipes != null) {
-              lastSearchedRecipes[query] = {
+              lastSearchedRecipes[text] = {
                 recipes: data.recipes,
                 count: 1
               };
@@ -58,6 +61,14 @@ class SaladDisplay extends Component{
                 recipePublisher: data.recipes[0].publisher,
                 recipeError: ""
               });
+            } else if (data.limit === true){
+              this.setState({
+                recipeTitle: null,
+                recipeUrl: null,
+                recipeImg: null,
+                recipePublisher: null,
+                limitError: "I'm sorry, we've reached our daily API call limit, try us again tomorrow."
+              })
             } else {
               this.setState({
                 recipeTitle: null,
@@ -76,13 +87,14 @@ class SaladDisplay extends Component{
   }
 
   getSeasonal() {
-    if (lastSeasonalSearchWord != "" && lastSearchedRecipes[lastSeasonalSearchWord].count <= 3) {
-      lastSearchedRecipes[lastSeasonalSearchWord].count += 1;
+    let existingVeggie = lastSearchedRecipes[lastSeasonalSearchWord];
+    if (lastSeasonalSearchWord != "" && existingVeggie.count <= 3) {
+      existingVeggie.count += 1;
       this.setState({
-        recipeTitle: lastSearchedRecipes[lastSeasonalSearchWord].recipes[lastSearchedRecipes[lastSeasonalSearchWord].count - 1].title,
-        recipeUrl: lastSearchedRecipes[lastSeasonalSearchWord].recipes[lastSearchedRecipes[lastSeasonalSearchWord].count - 1].source_url,
-        recipeImg: lastSearchedRecipes[lastSeasonalSearchWord].recipes[lastSearchedRecipes[lastSeasonalSearchWord].count - 1].image_url,
-        recipePublisher: lastSearchedRecipes[lastSeasonalSearchWord].recipes[lastSearchedRecipes[lastSeasonalSearchWord].count - 1].publisher,
+        recipeTitle: existingVeggie.recipes[existingVeggie.count - 1].title,
+        recipeUrl: existingVeggie.recipes[existingVeggie.count - 1].source_url,
+        recipeImg: existingVeggie.recipes[existingVeggie.count - 1].image_url,
+        recipePublisher: existingVeggie.recipes[existingVeggie.count - 1].publisher,
         recipeError: ""
       });
     } else {

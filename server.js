@@ -16,8 +16,8 @@ const food2Fork = require('./food2fork.js');
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get('/salad/:query', function (req, res) {
-  let query = req.params.query + " salad";
-  food2Fork.getRankedRecipes(query)
+  let encodedQuery = req.params.query + encodeURIComponent(" salad");
+  food2Fork.getRankedRecipes(encodedQuery)
     .then(data => {
       res.setHeader('Content-Type', 'application/json');
       res.send(data);
@@ -32,7 +32,7 @@ app.get('/salad/:query', function (req, res) {
 app.get('/seasonal', function(req, res) {
   console.log("inside seasonal");
   let winterVeggies = ["kale", "brussels sprouts", "blood orange", "orange", "grapefruit", "persimmon", "beet", "pomegranate"];
-  let springVeggies = ["asparagus", "artichoke", "radishes", "carrot", "peas", "leek", "watercress"];
+  let springVeggies = ["asparagus", "artichoke", "radishes", "carrot", "peas", "watercress"];
   let summerVeggies = ["blueberries", "arugula", "cucumber", "pepper", "tomato", "green bean", "corn", "fig", "strawberry", "zucchini", "melon"]
   let fallVeggies = ["squash", "apple", "pear", "cranberries", "pumpkin", "endive", "broccoli"]
   let currentMonth = new Date().getMonth() + 1;
