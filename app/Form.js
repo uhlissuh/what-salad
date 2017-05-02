@@ -6,6 +6,9 @@ class Form extends Component {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleSeasonal = this.handleSeasonal.bind(this);
+    this.state = {
+      alreadySearched: false
+    }
   }
 
   render() {
@@ -21,11 +24,7 @@ class Form extends Component {
               placeholder="Enter ingredients for your salad"
             />
           <span className="input-group-btn">
-              <button
-                className="btn btn-success"
-                type='submit'>
-                Go
-              </button>
+              {this.state.alreadySearched ? <button className="btn btn-success" type='submit'>Gimme Another</button> : <button className="btn btn-success" type='submit'>Find a Salad</button>}
             </span>
           </div>
           <br />
@@ -40,6 +39,7 @@ class Form extends Component {
   }
 
   handleSubmit(e) {
+    this.setState({alreadySearched: true});
     e.preventDefault();
     this.props.onSubmitForm(this.refs.searchWords.value);
   }
