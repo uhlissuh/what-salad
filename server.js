@@ -15,6 +15,8 @@ const food2Fork = require('./food2fork.js');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
+app.use(express.static('static'));
+
 app.get('/salad/:query', function (req, res) {
   let encodedQuery = req.params.query + encodeURIComponent(" salad");
   food2Fork.getRankedRecipes(encodedQuery)

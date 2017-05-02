@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './Form.css';
 
 
 class Form extends Component {
@@ -11,18 +10,30 @@ class Form extends Component {
 
   render() {
     return (
-      <div className="form">
-        <form onSubmit={this.handleSubmit}>
-          <label>vegetables: </label>
-          <input
-            ref="searchWords"
-            className="veggieInput"
-            type="text"
-            placeholder="asparagus"
-          />
-          <button type='submit'>Go</button>
+      <div>
+        <form
+          onSubmit={this.handleSubmit}>
+          <div className="input-group">
+            <input
+              ref="searchWords"
+              className="veggieInput form-control"
+              type="text"
+              placeholder="Enter ingredients for your salad"
+            />
+          <span className="input-group-btn">
+              <button
+                className="btn btn-success"
+                type='submit'>
+                Go
+              </button>
+            </span>
+          </div>
           <br />
-          <button onClick={this.handleSeasonal}>Seasonal Surprise!</button>
+        <button
+          className="btn btn-success btn-block"
+          onClick={this.handleSeasonal}>
+          Seasonal Surprise!
+        </button>
         </form>
       </div>
     );

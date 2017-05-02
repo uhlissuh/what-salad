@@ -19,16 +19,27 @@ class SaladDisplay extends Component{
   }
 
   render() {
-    return (
-      <div className="salad-box">
-      {this.state.recipeTitle}
-      <br></br>
-      <a href={this.state.recipeUrl} target="_blank">Check it out on {this.state.recipePublisher}</a>
-      <img src={this.state.recipeImg}></img>
-      <span>{this.state.recipeError}</span>
-      <span>{this.state.limitError}</span>
-    </div>
-    );
+    if (this.state.recipeError) {
+      return (
+      <div className="salad-box-error">
+        <span>{this.state.recipeError}</span>
+      </div>
+      );
+    } else {
+      return (
+        <div className="salad-box">
+          <a href={this.state.recipeUrl} target="_blank">
+            <h2 className="recipe-title">{this.state.recipeTitle}</h2>
+          </a>
+          <br></br>
+          <a href={this.state.recipeUrl} target="_blank">
+            {this.state.recipeTitle ? <img className="img-responsive center-block recipe-image" src={this.state.recipeImg}></img> : <img className="img-responsive center-block" src="lettuce.png"></img>}
+
+          </a>
+          <span>{this.state.limitError}</span>
+        </div>
+      );
+    }
   }
 
   getRecipe(text) {
@@ -75,7 +86,7 @@ class SaladDisplay extends Component{
                 recipeUrl: null,
                 recipeImg: null,
                 recipePublisher: null,
-                recipeError: "No recipes found with those ingredients!"
+                recipeError: "Oops, no recipes found with those ingredients. Search again!"
               });
             }
           })
