@@ -29,7 +29,6 @@ class App extends Component {
 
   onSubmitForm(text) {
     this.refs.saladDisplay.getRecipe(text);
-    this.refs.form.state.alreadySearched = true;
   }
 
   onSeasonalSubmit() {

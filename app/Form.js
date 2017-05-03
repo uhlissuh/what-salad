@@ -21,7 +21,7 @@ class Form extends Component {
               ref="searchWords"
               className="veggieInput form-control"
               type="text"
-              placeholder="Enter ingredients for your salad"
+              placeholder="Enter salad ingredients"
             />
           <span className="input-group-btn">
               {this.state.alreadySearched ? <button className="btn btn-success" type='submit'>Gimme Another</button> : <button className="btn btn-success" type='submit'>Find a Salad</button>}

@@ -38,6 +38,13 @@ form {
   padding-top: 100px;
 }
 
+.publisher-info {
+  font-family: 'PT Sans', sans-serif;
+  font-size: 16px;
+  padding-top: 15px;
+  color: #355E3B;
+}
+
 .btn {
   font-family: sans-serif;
 }

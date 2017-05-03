@@ -21,9 +21,15 @@ class SaladDisplay extends Component{
   render() {
     if (this.state.recipeError) {
       return (
-      <div className="salad-box-error">
-        <span>{this.state.recipeError}</span>
-      </div>
+        <div className="salad-box-error">
+          <span>{this.state.recipeError}</span>
+        </div>
+      );
+    } else if (this.state.limitError) {
+      return (
+        <div className="salad-box-error">
+          <span>{this.state.limitError}</span>
+        </div>
       );
     } else {
       return (
@@ -36,7 +42,7 @@ class SaladDisplay extends Component{
             {this.state.recipeTitle ? <img className="img-responsive center-block recipe-image" src={this.state.recipeImg}></img> : <img className="img-responsive center-block" src="lettuce.png"></img>}
 
           </a>
-          <span>{this.state.limitError}</span>
+          {this.state.recipePublisher ? <p className="publisher-info"><a href={this.state.recipeUrl}>from {this.state.recipePublisher}</a></p> : <p></p>}
         </div>
       );
     }
@@ -78,7 +84,7 @@ class SaladDisplay extends Component{
                 recipeUrl: null,
                 recipeImg: null,
                 recipePublisher: null,
-                limitError: "I'm sorry, we've reached our daily API call limit, try us again tomorrow."
+                limitError: "Shockingly, we've reached our daily API call limit, try this app again tomorrow."
               })
             } else {
               this.setState({
