@@ -110,3 +110,7 @@ input, textarea {
   -ms-user-select: text;
   user-select: text;
 }
+
+button {
+  cursor: pointer;
+}
