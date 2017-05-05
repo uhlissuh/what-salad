@@ -53,6 +53,7 @@ form {
 .veggieInput {
   font-family: sans-serif;
   font-size: 16px;
+  height: 36px;
 }
 
 @media (max-width: 600px) {
