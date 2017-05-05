@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Form from './Form.js';
 import SaladDisplay from './SaladDisplay.js';
+import 'whatwg-fetch';
 
 
 class App extends Component {
