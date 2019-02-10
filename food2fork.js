@@ -2,7 +2,7 @@ const request = require('request');
 
 exports.getRankedRecipes= function(query) {
   return new Promise((resolve, reject) => {
-    const API_KEY = "2fbcf141f4f25cde67d9645786a849a9";
+    const API_KEY = "8756beb18496b780f61372738958adf2";
     let url = "http://food2fork.com/api/search?sort=r&key=" + API_KEY + "&q=" + query;
     request(url, function(error, response, body) {
       console.log('error:', error);
