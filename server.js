@@ -1,8 +1,5 @@
 const path = require('path');
 const express = require('express');
-const webpackMiddleware = require('webpack-dev-middleware');
-const webpackHotMiddleware = require('webpack-hot-middleware');
-const config = require('./webpack.config.js');
 
 const isDeveloping = process.env.NODE_ENV !== 'production';
 const port = isDeveloping ? 3000 : process.env.PORT;
@@ -62,13 +59,15 @@ app.get('/seasonal', function(req, res) {
       res.send(data);
       res.end();
     });
-
-
 });
 
 
 if (isDeveloping) {
+  const config = require('./webpack.config.js');
   const webpack = require('webpack');
+  const webpackMiddleware = require('webpack-dev-middleware');
+  const webpackHotMiddleware = require('webpack-hot-middleware');
+
   const compiler = webpack(config);
   const middleware = webpackMiddleware(compiler, {
     publicPath: config.output.publicPath,
