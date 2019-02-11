@@ -15,7 +15,7 @@ class App extends Component {
           <div className="row main-display-row">
             <div className="col-md-6 form-display">
             <Form
-              onSubmitForm={this.onSubmitForm.bind(this)}
+              onSubmitMe={this.onSubmitForm.bind(this)}
               onSeasonalSubmit ={this.onSeasonalSubmit.bind(this)}
             />
             </div>

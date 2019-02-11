@@ -41,7 +41,7 @@ class Form extends Component {
   handleSubmit(e) {
     this.setState({alreadySearched: true});
     e.preventDefault();
-    this.props.onSubmitForm(this.refs.searchWords.value);
+    this.props.onSubmitMe(this.refs.searchWords.value);
   }
 
   handleSeasonal(e) {
