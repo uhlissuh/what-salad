@@ -1,6 +1,5 @@
 const path = require('path');
 const express = require('express');
-const webpack = require('webpack');
 const webpackMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 const config = require('./webpack.config.js');
@@ -69,6 +68,7 @@ app.get('/seasonal', function(req, res) {
 
 
 if (isDeveloping) {
+  const webpack = require('webpack');
   const compiler = webpack(config);
   const middleware = webpackMiddleware(compiler, {
     publicPath: config.output.publicPath,
