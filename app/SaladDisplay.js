@@ -15,7 +15,8 @@ class SaladDisplay extends Component{
       recipeUrl: "",
       recipeImg: "",
       recipePublisher: "",
-      limitError: ""
+      limitError: "",
+      isLoading: false
     };
   }
 
@@ -32,6 +33,12 @@ class SaladDisplay extends Component{
           <span>{this.state.limitError}</span>
         </div>
       );
+    } else if (this.state.isLoading){
+      return (
+        <div className="salad-box">
+          <img className="img-responsive center-block recipe-image" src="spinner.gif"></img>
+        </div>
+      )
     } else {
       return (
         <div className="salad-box">
@@ -64,6 +71,7 @@ class SaladDisplay extends Component{
         });
       } else {
         let serverEndpoint = '/salad/' + encodeURIComponent(text);
+        this.setState({isLoading: true});
         fetch(serverEndpoint)
           .then(response => response.json())
           .then(data => {
@@ -77,7 +85,8 @@ class SaladDisplay extends Component{
                 recipeUrl: data.recipes[0].source_url,
                 recipeImg: data.recipes[0].image_url,
                 recipePublisher: data.recipes[0].publisher,
-                recipeError: ""
+                recipeError: "",
+                isLoading: false
               });
             } else if (data.limit === true){
               this.setState({
@@ -85,7 +94,8 @@ class SaladDisplay extends Component{
                 recipeUrl: null,
                 recipeImg: null,
                 recipePublisher: null,
-                limitError: "Shockingly, we've reached our daily API call limit, try this app again tomorrow."
+                limitError: "Shockingly, we've reached our daily API call limit, try this app again tomorrow.",
+                isLoading: false
               })
             } else {
               this.setState({
@@ -93,7 +103,8 @@ class SaladDisplay extends Component{
                 recipeUrl: null,
                 recipeImg: null,
                 recipePublisher: null,
-                recipeError: "Oops, no recipes found with those ingredients. Search again!"
+                recipeError: "Oops, no recipes found with those ingredients. Search again!",
+                isLoading: false
               });
             }
           })
@@ -113,10 +124,12 @@ class SaladDisplay extends Component{
         recipeUrl: existingVeggie.recipes[existingVeggie.count - 1].source_url,
         recipeImg: existingVeggie.recipes[existingVeggie.count - 1].image_url,
         recipePublisher: existingVeggie.recipes[existingVeggie.count - 1].publisher,
-        recipeError: ""
+        recipeError: "",
+        isLoading: false
       });
     } else {
       let serverEndpoint = "/seasonal";
+      this.setState({isLoading: true});
       fetch(serverEndpoint)
       .then(response => response.json())
       .then(data => {
@@ -131,7 +144,8 @@ class SaladDisplay extends Component{
             recipeUrl: data.recipes[0].source_url,
             recipeImg: data.recipes[0].image_url,
             recipePublisher: data.recipes[0].publisher,
-            recipeError: ""
+            recipeError: "",
+            isLoading: false
           });
         } else {
           this.setState({
@@ -139,7 +153,8 @@ class SaladDisplay extends Component{
             recipeUrl: null,
             recipeImg: null,
             recipePublisher: null,
-            recipeError: "No recipes found with those ingredients!"
+            recipeError: "No recipes found with those ingredients!",
+            isLoading: false
           })
         }
       })
